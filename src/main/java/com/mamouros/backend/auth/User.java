@@ -6,19 +6,17 @@ import jakarta.persistence.*;
 @Table(name = "USERS")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
     private String name;
 
+    @Id
+    @Column(nullable = false, unique = true)
     private String username;
 
-    public User() {
-    }
+    private String email;
 
-    public Integer getId() {
-        return id;
+    private String password;
+
+    public User() {
     }
 
     public String getName() {
@@ -40,13 +38,24 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 '}';
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

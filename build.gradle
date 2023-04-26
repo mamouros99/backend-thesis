@@ -26,9 +26,9 @@ dependencies {
 	implementation group: 'org.fenixedu', name: 'feaf4j-api', version: '2.3.1'
 	// https://mvnrepository.com/artifact/org.fenixedu/feaf4j-okhttp
 	implementation group: 'org.fenixedu', name: 'feaf4j-okhttp', version: '2.3.1'
-	//implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation "org.springframework.boot:spring-boot-starter-security"
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-	//implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 }
 
