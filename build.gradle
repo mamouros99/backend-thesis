@@ -1,0 +1,37 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.5'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.mamouros'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+	maven {
+		url = uri("https://repo.fenixedu.org/fenixedu-maven-repository")
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
+	implementation group: 'commons-io', name: 'commons-io', version:'2.11.0'
+	// https://mvnrepository.com/artifact/org.fenixedu/feaf4j-api
+	implementation group: 'org.fenixedu', name: 'feaf4j-api', version: '2.3.1'
+	// https://mvnrepository.com/artifact/org.fenixedu/feaf4j-okhttp
+	implementation group: 'org.fenixedu', name: 'feaf4j-okhttp', version: '2.3.1'
+	//implementation "org.springframework.boot:spring-boot-starter-security"
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+	//implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
