@@ -17,12 +17,6 @@ public class User {
     public User() {
     }
 
-    public User(String name, String ISTNumber) {
-        this.name = name;
-        this.username = ISTNumber;
-    }
-
-
     public Integer getId() {
         return id;
     }
@@ -50,5 +44,9 @@ public class User {
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 '}';
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

@@ -1,28 +1,13 @@
 package com.mamouros.backend.auth;
 import com.google.gson.JsonObject;
-import com.mamouros.backend.BackendApplication;
 import org.fenixedu.sdk.ApplicationConfiguration;
 import org.fenixedu.sdk.FenixEduClientImpl;
 import org.fenixedu.sdk.FenixEduUserDetails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FenixEdu {
     private final FenixEduClientImpl client;
 
     private JsonObject person;
-
-
-    public FenixEdu(String oathKey, String oathSecret, String callbackUrl, String baseUrl) {
-
-        try{
-            ApplicationConfiguration config =  new ApplicationConfiguration(baseUrl, oathKey, oathSecret, callbackUrl);
-            client = new FenixEduClientImpl(config);
-        }
-        catch (Exception e){
-            throw new RuntimeException("Unable to connect to IST");
-        }
-    }
 
     public FenixEdu() {
 
