@@ -37,4 +37,9 @@ public class FenixEdu {
     public String getName(){
         return person.get("name").toString().replaceAll("\"", "");
     }
+
+    public String getEmail(){
+        return person.get("email").toString().replaceAll("\"", "");
+    }
+
 }

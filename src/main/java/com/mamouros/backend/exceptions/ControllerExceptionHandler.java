@@ -24,6 +24,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> globalHandler(Exception ex, WebRequest request) {
         System.out.println("Global Exception: " + ex.getMessage());
+
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 ex.getMessage(),

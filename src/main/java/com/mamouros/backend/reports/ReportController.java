@@ -4,6 +4,7 @@ import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.ecoIsland.EcoIslandRepository;
 import com.mamouros.backend.exceptions.ReportNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,16 +38,19 @@ public class ReportController {
         return "Saved";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Report> getAllReports() {
         return reportRepository.findAll();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @DeleteMapping("delete/{id}")
     public @ResponseBody void deleteById(@PathVariable Integer id){
         reportRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path="/{id}")
     public @ResponseBody Report getReportById(@PathVariable Integer id){
         return reportRepository.findById(id)
