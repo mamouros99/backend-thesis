@@ -30,7 +30,8 @@ public class ReportController {
                 reportDto.getSeparation(),
                 reportDto.getFull(),
                 reportDto.getDirty(),
-                reportDto.getTime()
+                reportDto.getTime(),
+                reportDto.getMessage()
         );
 
         reportRepository.save(n);

@@ -12,6 +12,7 @@ public class ReportDto implements Serializable {
     private String dirty;
 
     private String time;
+    private String message;
 
     public ReportDto() {
     }
@@ -22,6 +23,7 @@ public class ReportDto implements Serializable {
         this.full = report.getFull();
         this.dirty = report.getDirty();
         this.time = report.getTime();
+        this.message = report.getMessage();
     }
 
     public Integer getId() {
@@ -78,5 +80,9 @@ public class ReportDto implements Serializable {
                 ", dirty='" + dirty + '\'' +
                 ", time='" + time + '\'' +
                 '}';
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

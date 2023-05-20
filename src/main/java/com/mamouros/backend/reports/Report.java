@@ -23,15 +23,19 @@ public class Report{
 
     private String time;
 
+    @Column(length = 300)
+    private String message;
+
     public Report() {
     }
 
-    public Report(EcoIsland ecoIsland, String separation, String full, String dirty, String time) {
+    public Report(EcoIsland ecoIsland, String separation, String full, String dirty, String time, String message) {
         this.ecoIsland = ecoIsland;
         this.separation = separation;
         this.full = full;
         this.dirty = dirty;
         this.time = time;
+        this.message = message;
     }
 
     public Integer getId() {
@@ -87,6 +91,11 @@ public class Report{
                 ", full='" + full + '\'' +
                 ", dirty='" + dirty + '\'' +
                 ", time='" + time + '\'' +
+                ", message='" + message + '\'' +
                 '}';
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

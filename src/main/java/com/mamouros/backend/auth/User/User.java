@@ -13,7 +13,6 @@ import java.util.List;
 public class User implements UserDetails {
 
     private String name;
-
     @Id
     @Column(nullable = false, unique = true)
     private String username;
