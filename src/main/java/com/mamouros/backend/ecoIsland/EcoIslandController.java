@@ -6,6 +6,10 @@ import com.mamouros.backend.exceptions.IslandNotFoundException;
 import com.mamouros.backend.exceptions.WrongFileException;
 import com.mamouros.backend.reports.CSVService;
 import com.mamouros.backend.helpers.CSVHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,7 +67,6 @@ public class EcoIslandController {
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @PutMapping("/update")
     public @ResponseBody void updateEcoisland(@RequestBody EcoIsland ecoIsland ){
-        System.out.println("Entered");
         ecoIslandRepository.findById(ecoIsland.getId()).orElseThrow(() -> new IslandNotFoundException(ecoIsland.getId()));
         ecoIslandRepository.save(ecoIsland);
     }

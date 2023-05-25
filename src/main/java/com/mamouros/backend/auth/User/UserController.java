@@ -27,8 +27,8 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/get/{username}")
-    public @ResponseBody void getUserByID(@PathVariable String username ){
-        userService.findByUsername(username);
+    public @ResponseBody User getUserByID(@PathVariable String username ){
+        return userService.findByUsername(username);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -23,7 +23,6 @@ public class Report{
 
     private String time;
 
-    @Column(length = 300)
     private String message;
 
     public Report() {

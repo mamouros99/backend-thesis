@@ -8,12 +8,14 @@ public class AuthResponseDto {
     private String username;
     private String name;
     private String role;
+    private String email;
 
     public AuthResponseDto(String token, User user) {
         this.token = token;
         this.username = user.getUsername();
         this.name = user.getName();
         this.role = user.getRole().name();
+        this.email = user.getEmail();
     }
 
     public String getToken() {
@@ -34,6 +36,13 @@ public class AuthResponseDto {
 
     public String getName() {
         return name;
+    }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public void setName(String name) {

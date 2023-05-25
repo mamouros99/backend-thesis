@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/building/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/ecoisland/**"  ).permitAll()
                 .requestMatchers(HttpMethod.POST , "/report/add"  ).permitAll()
                 .anyRequest().authenticated()
