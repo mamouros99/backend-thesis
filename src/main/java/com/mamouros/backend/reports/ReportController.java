@@ -47,13 +47,13 @@ public class ReportController {
 
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @DeleteMapping("delete/{id}")
-    public @ResponseBody void deleteById(@PathVariable Integer id){
+    public @ResponseBody void deleteById(@PathVariable Long id){
         reportRepository.deleteById(id);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path="/{id}")
-    public @ResponseBody Report getReportById(@PathVariable Integer id){
+    public @ResponseBody Report getReportById(@PathVariable Long id){
         return reportRepository.findById(id)
                 .orElseThrow(() -> new ReportNotFoundException(id));
     }

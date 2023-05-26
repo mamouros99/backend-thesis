@@ -3,9 +3,9 @@ package com.mamouros.backend.reports;
 import java.io.Serializable;
 
 public class ReportDto implements Serializable {
-    private Integer id;
+    private Long id;
 
-    private Integer ecoIslandId;
+    private Long ecoIslandId;
     private  String separation;
     private  String full;
 
@@ -26,15 +26,15 @@ public class ReportDto implements Serializable {
         this.message = report.getMessage();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public Integer getEcoIslandId() {
+    public Long getEcoIslandId() {
         return ecoIslandId;
     }
 
-    public void setEcoIslandId(Integer ecoIslandId) {
+    public void setEcoIslandId(Long ecoIslandId) {
         this.ecoIslandId = ecoIslandId;
     }
 

@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Report{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ecoisland_id", nullable = false)
@@ -37,7 +37,7 @@ public class Report{
         this.message = message;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

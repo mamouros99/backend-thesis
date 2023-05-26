@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class EcoIsland {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(name = "building_name", nullable = false)
     private String building;
@@ -31,7 +31,7 @@ public class EcoIsland {
         this.bins = bins;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

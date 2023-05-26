@@ -35,12 +35,12 @@ public class EcoIslandController {
 
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public @ResponseBody void deleteEcoIslandById(@PathVariable Integer id){
+    public @ResponseBody void deleteEcoIslandById(@PathVariable Long id){
         ecoIslandRepository.deleteById(id);
     }
 
     @GetMapping(path="/{id}")
-    public @ResponseBody EcoIsland getEcoIslandById(@PathVariable Integer id){
+    public @ResponseBody EcoIsland getEcoIslandById(@PathVariable Long id){
         return ecoIslandRepository.findById(id)
                 .orElseThrow(() -> new IslandNotFoundException(id));
     }

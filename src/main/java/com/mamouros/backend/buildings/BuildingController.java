@@ -7,6 +7,7 @@ import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.exceptions.IslandNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,6 @@ public class BuildingController {
         return result;
     }
 
-
     @GetMapping(path="/{id}")
     public @ResponseBody Object getBuildingsById(@PathVariable String id){
         try{
@@ -59,6 +59,20 @@ public class BuildingController {
         }
 
         return null;
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping(path = "/add")
+    public @ResponseBody String addNewBuilding(@RequestBody UserBuildings userBuildings){
+        System.out.println(userBuildings);
+        userBuildingsRepository.save(userBuildings);
+        return "Saved";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping(path = "/get/{username}")
+    public @ResponseBody Iterable<UserBuildings> getBuildingsByUsername(@PathVariable String username){
+        return userBuildingsRepository.findAll();
     }
 
     public String htmlRequest(String requestUrl) throws IOException {
