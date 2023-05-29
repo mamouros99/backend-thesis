@@ -72,8 +72,15 @@ public class BuildingController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(path = "/get/{username}")
     public @ResponseBody Iterable<UserBuildings> getBuildingsByUsername(@PathVariable String username){
-        return userBuildingsRepository.findAll();
+        return userBuildingsRepository.findUserBuildingsByUsername(username);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    public @ResponseBody void deleteBuildingsByUsernameAndBuildingId(@PathVariable Long id){
+        userBuildingsRepository.deleteById(id);
+    }
+
 
     public String htmlRequest(String requestUrl) throws IOException {
         URL url = new URL(requestUrl);

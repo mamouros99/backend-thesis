@@ -1,15 +1,16 @@
 package com.mamouros.backend.buildings;
 
-import com.mamouros.backend.auth.User.User;
-import com.mamouros.backend.ecoIsland.EcoIsland;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface UserBuildingsRepository extends JpaRepository<UserBuildings, String> {
+@Transactional
+public interface UserBuildingsRepository extends JpaRepository<UserBuildings, Long> {
 
+    List<UserBuildings> findUserBuildingsByUsername(String username);
 
 
 }
