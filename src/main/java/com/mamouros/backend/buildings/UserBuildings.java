@@ -6,33 +6,14 @@ import jakarta.persistence.*;
 public class UserBuildings {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "username")
-    private String username;
-
     @Column(name = "buildingId")
     private String buildingId;
-    private String buildingName;
+    private String name;
 
     public UserBuildings(){}
-    public UserBuildings(String username, String buildingId, String buildingName){
-        this.username = username;
+    public UserBuildings( String buildingId, String buildingName){
         this.buildingId = buildingId;
-        this.buildingName = buildingName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+        this.name = buildingName;
     }
 
     public String getBuildingId() {
@@ -43,20 +24,19 @@ public class UserBuildings {
         this.buildingId = buildingId;
     }
 
-    public String getBuildingName() {
-        return buildingName;
+    public String getName() {
+        return name;
     }
 
-    public void setBuildingName(String buildingName) {
-        this.buildingName = buildingName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "UserBuildings{" +
-                "username='" + username + '\'' +
-                ", buildingId='" + buildingId + '\'' +
-                ", buildingName='" + buildingName + '\'' +
+                "buildingId='" + buildingId + '\'' +
+                ", buildingName='" + name + '\'' +
                 '}';
     }
 }

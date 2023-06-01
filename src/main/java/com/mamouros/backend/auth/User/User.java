@@ -1,10 +1,12 @@
 package com.mamouros.backend.auth.User;
 
+import com.mamouros.backend.buildings.UserBuildings;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +25,13 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "user_username")
+    private List<UserBuildings> buildings = new ArrayList<>();
 
     public User() {
     }
@@ -105,13 +114,22 @@ public class User implements UserDetails {
         return null;
     }
 
+    public List<UserBuildings> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(List<UserBuildings> buildings) {
+        this.buildings = buildings;
+    }
 
     @Override
     public String toString() {
         return "User{" +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", buildings=" + buildings +
                 '}';
     }
-
 }

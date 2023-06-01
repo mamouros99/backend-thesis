@@ -36,4 +36,6 @@ public class UserController {
     public @ResponseBody Iterable<User> getAllUsers(){
         return userService.findAllUsers();
     }
+
+
 }

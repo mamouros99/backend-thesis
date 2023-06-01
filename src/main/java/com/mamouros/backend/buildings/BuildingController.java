@@ -3,11 +3,15 @@ package com.mamouros.backend.buildings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.exceptions.IslandNotFoundException;
+import com.mamouros.backend.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,9 @@ public class BuildingController {
 
     @Autowired
     UserBuildingsRepository userBuildingsRepository;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     @GetMapping(path="/all")
     public @ResponseBody Object getBuildings(){
@@ -62,23 +69,44 @@ public class BuildingController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @PostMapping(path = "/add")
-    public @ResponseBody String addNewBuilding(@RequestBody UserBuildings userBuildings){
-        System.out.println(userBuildings);
-        userBuildingsRepository.save(userBuildings);
+    @PostMapping(path = "/add/{username}")
+    public @ResponseBody String addNewBuilding(@RequestBody UserBuildings userBuildings, @PathVariable String username){
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+        user.getBuildings().add(userBuildings);
+
+        usersRepository.save(user);
         return "Saved";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(path = "/get/{username}")
     public @ResponseBody Iterable<UserBuildings> getBuildingsByUsername(@PathVariable String username){
-        return userBuildingsRepository.findUserBuildingsByUsername(username);
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        return user.getBuildings();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
+    @GetMapping(path = "/mybuildings")
+    public @ResponseBody Iterable<UserBuildings> getMyBuildings(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((User) principal).getUsername();
+
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        return user.getBuildings();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/delete/{id}")
-    public @ResponseBody void deleteBuildingsByUsernameAndBuildingId(@PathVariable Long id){
-        userBuildingsRepository.deleteById(id);
+    @DeleteMapping("/delete/{username}/{buildingId}")
+    public @ResponseBody void deleteBuildingFromUser(@PathVariable String username, @PathVariable String buildingId){
+        User user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+        user.getBuildings().removeIf(element -> (element.getBuildingId().equals(buildingId)));
+        usersRepository.save(user);
     }
 
 
