@@ -1,4 +1,4 @@
-package com.mamouros.backend.reports;
+package com.mamouros.backend.helpers;
 
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.ecoIsland.EcoIslandRepository;

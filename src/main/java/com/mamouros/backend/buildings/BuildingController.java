@@ -3,24 +3,20 @@ package com.mamouros.backend.buildings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mamouros.backend.auth.User.Role;
 import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UsersRepository;
-import com.mamouros.backend.ecoIsland.EcoIsland;
-import com.mamouros.backend.exceptions.IslandNotFoundException;
 import com.mamouros.backend.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Controller
@@ -68,15 +64,29 @@ public class BuildingController {
         return null;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_VIEWER')")
     @PostMapping(path = "/add/{username}")
-    public @ResponseBody String addNewBuilding(@RequestBody UserBuildings userBuildings, @PathVariable String username){
-        User user = usersRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
-        user.getBuildings().add(userBuildings);
+    public @ResponseBody String addNewBuilding(@RequestBody UserBuildingsDto userBuildingsDto, @PathVariable String username){
 
-        usersRepository.save(user);
-        return "Saved";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String requesterUsername = ((User) principal).getUsername();
+        Role role = ((User) principal).getRole();
+
+        if(!role.equals(Role.ADMIN) && !requesterUsername.equals(username))
+            throw new RuntimeException("You don't have permissions");
+        else {
+            User user = usersRepository.findByUsername(username)
+                    .orElseThrow(() -> new UserNotFoundException(username));
+
+            UserBuildings userBuildings = new UserBuildings();
+            userBuildings.setId(new BuildingId(userBuildingsDto.getId(), user));
+            userBuildings.setName(userBuildingsDto.getName());
+
+            user.getBuildings().add(userBuildings);
+
+            usersRepository.save(user);
+            return "Saved";
+        }
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -105,7 +115,7 @@ public class BuildingController {
     public @ResponseBody void deleteBuildingFromUser(@PathVariable String username, @PathVariable String buildingId){
         User user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
-        user.getBuildings().removeIf(element -> (element.getBuildingId().equals(buildingId)));
+        user.getBuildings().removeIf(element -> (element.getId().equals(buildingId)));
         usersRepository.save(user);
     }
 

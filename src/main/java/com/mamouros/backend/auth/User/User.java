@@ -6,17 +6,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails {
 
     private String name;
+
     @Id
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -28,10 +27,9 @@ public class User implements UserDetails {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            targetEntity = UserBuildings.class
     )
-    @JoinColumn(name = "user_username")
-    private List<UserBuildings> buildings = new ArrayList<>();
+    private Set<UserBuildings> buildings;
 
     public User() {
     }
@@ -114,11 +112,11 @@ public class User implements UserDetails {
         return null;
     }
 
-    public List<UserBuildings> getBuildings() {
+    public Set<UserBuildings> getBuildings() {
         return buildings;
     }
 
-    public void setBuildings(List<UserBuildings> buildings) {
+    public void setBuildings(Set<UserBuildings> buildings) {
         this.buildings = buildings;
     }
 

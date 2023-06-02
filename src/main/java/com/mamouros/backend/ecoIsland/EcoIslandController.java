@@ -2,23 +2,15 @@ package com.mamouros.backend.ecoIsland;
 
 import com.mamouros.backend.auth.User.Role;
 import com.mamouros.backend.auth.User.User;
-import com.mamouros.backend.auth.User.UserDto;
-import com.mamouros.backend.buildings.UserBuildings;
 import com.mamouros.backend.exceptions.IslandNotFoundException;
 import com.mamouros.backend.exceptions.WrongFileException;
-import com.mamouros.backend.reports.CSVService;
+import com.mamouros.backend.helpers.CSVService;
 import com.mamouros.backend.helpers.CSVHelper;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,7 +49,6 @@ public class EcoIslandController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Role role = ((User) principal).getRole();
         String username = ((User) principal).getUsername();
-        Iterable<EcoIsland> ecoIslands;
         if(!role.equals(Role.ADMIN)) {
             return ecoIslandRepository.findAllByUsername(username);
         }
