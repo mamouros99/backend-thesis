@@ -1,5 +1,6 @@
 package com.mamouros.backend.buildings;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mamouros.backend.auth.User.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -15,6 +16,7 @@ public class BuildingId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @JsonManagedReference
     private User user;
 
     public BuildingId() {

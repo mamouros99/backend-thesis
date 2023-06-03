@@ -1,5 +1,6 @@
 package com.mamouros.backend.auth.User;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mamouros.backend.buildings.UserBuildings;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,6 +30,7 @@ public class User implements UserDetails {
             cascade = CascadeType.ALL,
             targetEntity = UserBuildings.class
     )
+    @JsonBackReference
     private Set<UserBuildings> buildings;
 
     public User() {

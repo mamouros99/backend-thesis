@@ -4,14 +4,11 @@ public class UserBuildingsDto {
 
     private String id;
     private String name;
-    private String username;
 
     public UserBuildingsDto(){}
-    public UserBuildingsDto(String id, String name, String username) {
+    public UserBuildingsDto(String id, String name) {
         this.id = id;
         this.name = name;
-        this.username = username;
-
     }
 
     public String getId() {
