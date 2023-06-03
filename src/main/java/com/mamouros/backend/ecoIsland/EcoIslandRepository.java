@@ -15,11 +15,10 @@ import java.util.Objects;
 public interface EcoIslandRepository extends CrudRepository<EcoIsland, Long> {
 
     @Query(
-            value = "select eco_islands.* from ((users inner join user_buildings  " +
-                    "on users.username = user_buildings.user_username) " +
+            value = "select eco_islands.* from user_buildings " +
                     "inner join eco_islands " +
-                    "on user_buildings.name = eco_islands.building_name)" +
-                    "where users.username = :name",
+                    "on user_buildings.name = eco_islands.building_name " +
+                    "where user_buildings.username = :name",
             nativeQuery = true)
     Iterable<EcoIsland> findAllByUsername(@Param("name") String name);
 }

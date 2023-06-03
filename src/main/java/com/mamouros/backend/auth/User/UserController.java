@@ -19,10 +19,9 @@ public class UserController {
    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/update")
-    public @ResponseBody void updateRoleByUsername(@RequestBody UserDto userDto ){
-       User user = new User(userDto);
-       userService.updateUser( user);
+    @PutMapping("/update/{username}/{role}")
+    public @ResponseBody void updateRoleByUsername(@PathVariable String username, @PathVariable Role role ){
+       userService.updateUser( username, role);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

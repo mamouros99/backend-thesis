@@ -10,11 +10,10 @@ import org.springframework.stereotype.Repository;
 public interface ReportRepository extends CrudRepository<Report, Long> {
 
     @Query(
-            value = "select eco_islands.* from ((users inner join user_buildings  " +
-                    "on users.username = user_buildings.user_username) " +
-                    "inner join eco_islands " +
-                    "on user_buildings.name = eco_islands.building_name)" +
-                    "where users.username = :name",
+            value = "select reports.* from ((user_buildings inner join eco_islands" +
+                    " on user_buildings.name = eco_islands.building_name) " +
+                    "inner join reports on reports.ecoisland_id = eco_islands.id) " +
+                    "where user_buildings.username = :name",
             nativeQuery = true)
     Iterable<Report> findAllByUsername(@Param("name") String name);
 

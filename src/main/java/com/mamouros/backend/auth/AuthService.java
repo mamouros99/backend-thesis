@@ -24,6 +24,9 @@ public class AuthService {
         }catch (UserNotFoundException e){
             user = userService.saveUserFromFenix(fenix);
         }
+
+        //user = userService.findByUsername("ist123451");
+
         String token = jwtService.generateToken(user);
 
         return new AuthResponseDto(token, user);

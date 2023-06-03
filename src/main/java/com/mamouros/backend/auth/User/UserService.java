@@ -28,9 +28,10 @@ public class UserService {
         usersRepository.deleteById(username);
     }
 
-    public void updateUser(User user) {
+    public void updateUser(String username, Role role) {
 
-        findByUsername(user.getUsername());
+        User user = findByUsername(username);
+        user.setRole(role);
         usersRepository.save(user);
     }
 

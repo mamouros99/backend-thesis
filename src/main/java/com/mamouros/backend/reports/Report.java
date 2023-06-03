@@ -1,9 +1,11 @@
 package com.mamouros.backend.reports;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
 
 @Entity
 @Table(name = "REPORTS")
@@ -12,9 +14,10 @@ public class Report{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ecoisland_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private EcoIsland ecoIsland;
     private  String separation;
     private  String full;
