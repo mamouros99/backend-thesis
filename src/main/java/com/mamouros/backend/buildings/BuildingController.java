@@ -90,7 +90,6 @@ public class BuildingController {
 
             is.close();
             baos.close();
-            System.out.println(encoded);
             return encoded;
 
         } catch (Exception e){
