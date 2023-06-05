@@ -42,6 +42,7 @@ public class CSVHelper {
 
                 EcoIsland ecoIsland = new EcoIsland(
                         csvRecord.get("building"),
+                        csvRecord.get("buildingId"),
                         csvRecord.get("floor"),
                         csvRecord.get("description"),
                         csvRecord.get("bins")

@@ -12,6 +12,9 @@ public class EcoIsland {
     @Column(name = "building_name", nullable = false)
     private String building;
 
+    @Column(name = "building_id", nullable = false)
+    private String buildingId;
+
     @Column(name = "floor", nullable = false)
     private String floor;
     @Column(name = "description", nullable = false)
@@ -24,11 +27,12 @@ public class EcoIsland {
     public EcoIsland() {
     }
 
-    public EcoIsland(String building, String floor, String description, String bins) {
+    public EcoIsland(String building, String buildingId, String floor, String description, String bins) {
         this.building = building;
         this.floor = floor;
         this.description = description;
         this.bins = bins;
+        this.buildingId = buildingId;
     }
 
     public Long getId() {
@@ -67,11 +71,20 @@ public class EcoIsland {
         this.bins = bins;
     }
 
+    public String getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(String buildingId) {
+        this.buildingId = buildingId;
+    }
+
     @Override
     public String toString() {
         return "EcoIsland{" +
                 "id=" + id +
                 ", building='" + building + '\'' +
+                ", buildingId='" + buildingId + '\'' +
                 ", floor='" + floor + '\'' +
                 ", description='" + description + '\'' +
                 ", bins='" + bins + '\'' +

@@ -7,6 +7,7 @@ import com.mamouros.backend.auth.User.Role;
 import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.exceptions.UserNotFoundException;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.*;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Objects;
 
 @Controller
@@ -56,6 +59,39 @@ public class BuildingController {
 
             String aux = htmlRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + id);
             return JsonParser.parseString(aux).getAsJsonObject().toString();
+
+        } catch (Exception e){
+            System.out.println(e + " -" + e.getMessage());
+        }
+
+        return null;
+    }
+
+    @GetMapping(path="/image/{id}")
+    public @ResponseBody String getImageForBuildingsById(@PathVariable String id){
+        try{
+            String imageUrl = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + id +"/blueprint?format=jpeg";
+            URL url = new URL(imageUrl);
+            URLConnection urlConn = url.openConnection();
+
+            InputStream is = urlConn.getInputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+
+            int length;
+            byte[] b = new byte[1024];
+
+
+            while ((length = is.read(b)) != -1)
+                baos.write(b, 0, length);
+
+
+            String encoded = Base64.getEncoder().encodeToString(baos.toByteArray());
+
+            is.close();
+            baos.close();
+            System.out.println(encoded);
+            return encoded;
 
         } catch (Exception e){
             System.out.println(e + " -" + e.getMessage());
