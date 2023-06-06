@@ -1,78 +1,45 @@
 package com.mamouros.backend.reports;
 
-import com.mamouros.backend.auth.User.Role;
-import com.mamouros.backend.auth.User.User;
-import com.mamouros.backend.ecoIsland.EcoIsland;
-import com.mamouros.backend.ecoIsland.EcoIslandRepository;
-import com.mamouros.backend.exceptions.ReportNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping(path = "/report")
 public class ReportController {
-    @Autowired
-    private ReportRepository reportRepository;
 
     @Autowired
-    private EcoIslandRepository ecoIslandRepository;
-
-
-
+    private ReportService reportService;
 
     @PostMapping(path="/add")
-    public @ResponseBody String addReport(@RequestBody ReportDto reportDto){
-
-        EcoIsland ecoIsland = ecoIslandRepository.findById(reportDto.getEcoIslandId()).orElseThrow(RuntimeException::new);
-
-        Report n = new Report(
-                ecoIsland,
-                reportDto.getSeparation(),
-                reportDto.getFull(),
-                reportDto.getDirty(),
-                reportDto.getTime(),
-                reportDto.getMessage()
-        );
-
-        reportRepository.save(n);
-
-        return "Saved";
+    public @ResponseBody void addReport(@RequestBody ReportDto reportDto){
+        reportService.addReport(reportDto);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Report> getAllReports() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Role role = ((User) principal).getRole();
-        String username = ((User) principal).getUsername();
-        if(!role.equals(Role.ADMIN)) {
-            return reportRepository.findAllByUsername(username);
-        }
-        else {
-            return reportRepository.findAll();
-        }
+        return reportService.getAllReports();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
+    @GetMapping(path = "/export")
+    public @ResponseBody ResponseEntity<Resource> exportReports() {
+        return reportService.exportReports();
     }
 
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @DeleteMapping("delete/{id}")
     public @ResponseBody void deleteById(@PathVariable Long id){
-        reportRepository.deleteById(id);
+        reportService.deleteById(id);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path="/{id}")
     public @ResponseBody Report getReportById(@PathVariable Long id){
-        return reportRepository.findById(id)
-                .orElseThrow(() -> new ReportNotFoundException(id));
+        return reportService.findById(id);
     }
-
-
-
-
 }

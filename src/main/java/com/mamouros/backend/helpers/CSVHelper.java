@@ -3,8 +3,10 @@ package com.mamouros.backend.helpers;
 import com.mamouros.backend.BackendApplication;
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.exceptions.BadCSVFileException;
+import com.mamouros.backend.reports.Report;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.slf4j.Logger;
@@ -24,8 +26,6 @@ public class CSVHelper {
     public static boolean hasCSVFormat(MultipartFile file){
         return TYPE.equals(file.getContentType());
     }
-
-    private static final Logger log = LoggerFactory.getLogger(BackendApplication.class);
 
     public static List<EcoIsland> csvToEcoIsland(InputStream is) {
         //Must remove start bytes from excel files
@@ -62,4 +62,72 @@ public class CSVHelper {
         }
     }
 
+    public static ByteArrayOutputStream ReportsToCSV(List<Report> reports){
+        String[] csvHeader = {
+                "id", "ecoislandId", "separation", "full", "dirty", "message", "time"
+        };
+        ByteArrayInputStream byteArrayOutputStream = null;
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT.withHeader(csvHeader));
+
+            for (Report report: reports) {
+                printer.printRecord(
+                        report.getId(),
+                        report.getEcoIsland().getId(),
+                        report.getSeparation(),
+                        report.getFull(),
+                        report.getDirty(),
+                        report.getMessage(),
+                        report.getTime()
+                );
+            }
+
+            printer.flush();
+
+            return out;
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ByteArrayOutputStream EcoislandsToCSV(List<EcoIsland> ecoIslands) {
+        String[] csvHeader = {
+                "id", "building", "buildingId", "floor", "description", "bins"
+        };
+        ByteArrayInputStream byteArrayOutputStream = null;
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            CSVPrinter printer = new CSVPrinter(new PrintWriter(out), CSVFormat.DEFAULT.withHeader(csvHeader));
+
+            for (EcoIsland ecoisland: ecoIslands) {
+                printer.printRecord(
+                        ecoisland.getId(),
+                        ecoisland.getBuilding(),
+                        ecoisland.getBuildingId(),
+                        ecoisland.getFloor(),
+                        ecoisland.getDescription(),
+                        ecoisland.getBins()
+                );
+            }
+
+            printer.flush();
+
+            return out;
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

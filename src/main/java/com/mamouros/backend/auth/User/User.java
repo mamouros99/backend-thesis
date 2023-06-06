@@ -43,12 +43,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public User(UserDto userDto) {
-        this.username = userDto.getUsername();
-        this.name = userDto.getName();
-        this.email = userDto.getEmail();
-        this.role = Role.valueOf(userDto.getRole());
-    }
 
     public String getName() {
         return name;

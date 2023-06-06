@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface UserBuildingsRepository extends JpaRepository<UserBuildings, Long> {
-
+public interface UserBuildingsRepository extends JpaRepository<UserBuildings, BuildingId> {
 
 }

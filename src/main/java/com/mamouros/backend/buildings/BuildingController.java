@@ -7,6 +7,7 @@ import com.mamouros.backend.auth.User.Role;
 import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.exceptions.UserNotFoundException;
+import com.mamouros.backend.helpers.GlobalHelper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -103,11 +104,9 @@ public class BuildingController {
     @PostMapping(path = "/add/{username}")
     public @ResponseBody String addNewBuilding(@RequestBody UserBuildingsDto userBuildingsDto, @PathVariable String username){
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String requesterUsername = ((User) principal).getUsername();
-        Role role = ((User) principal).getRole();
+        User requester = GlobalHelper.getUserFromSecurityContext();
 
-        if(!role.equals(Role.ADMIN) && !requesterUsername.equals(username))
+        if(!requester.getRole().equals(Role.ADMIN) && !requester.getUsername().equals(username))
             throw new RuntimeException("You don't have permissions");
         else {
             User user = usersRepository.findByUsername(username)
@@ -136,11 +135,10 @@ public class BuildingController {
     @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path = "/mybuildings")
     public @ResponseBody Iterable<UserBuildings> getMyBuildings(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((User) principal).getUsername();
+        User requester = GlobalHelper.getUserFromSecurityContext();
 
-        User user = usersRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
+        User user = usersRepository.findByUsername(requester.getUsername())
+                .orElseThrow(() -> new UserNotFoundException(requester.getUsername()));
 
         return user.getBuildings();
     }
@@ -150,8 +148,10 @@ public class BuildingController {
     public @ResponseBody void deleteBuildingFromUser(@PathVariable String username, @PathVariable String buildingId){
         User user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
-        user.getBuildings().removeIf(element -> (element.getId().equals(buildingId)));
+        user.getBuildings().removeIf(element -> (element.getId().getId().equals(buildingId)));
         usersRepository.save(user);
+
+        userBuildingsRepository.deleteById(new BuildingId(buildingId, user));
     }
 
 
