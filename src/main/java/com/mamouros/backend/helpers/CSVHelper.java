@@ -45,7 +45,9 @@ public class CSVHelper {
                         csvRecord.get("buildingId"),
                         csvRecord.get("floor"),
                         csvRecord.get("description"),
-                        csvRecord.get("bins")
+                        csvRecord.get("bins"),
+                        Integer.parseInt(csvRecord.get("xPos")),
+                        Integer.parseInt(csvRecord.get("yPos"))
                 );
 
                 ecoIslandList.add(ecoIsland);
@@ -99,7 +101,7 @@ public class CSVHelper {
 
     public static ByteArrayOutputStream EcoislandsToCSV(List<EcoIsland> ecoIslands) {
         String[] csvHeader = {
-                "id", "building", "buildingId", "floor", "description", "bins"
+                "id", "building", "buildingId", "floor", "description", "bins", "xPos", "yPos"
         };
         ByteArrayInputStream byteArrayOutputStream = null;
 

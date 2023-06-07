@@ -23,16 +23,20 @@ public class EcoIsland {
     @Column(name = "bins",length = 2, nullable = false)
     private String bins;
 
+    private Integer xPos;
+    private Integer yPos;
 
     public EcoIsland() {
     }
 
-    public EcoIsland(String building, String buildingId, String floor, String description, String bins) {
+    public EcoIsland(String building, String buildingId, String floor, String description, String bins, Integer xPos, Integer yPos ) {
         this.building = building;
         this.floor = floor;
         this.description = description;
         this.bins = bins;
         this.buildingId = buildingId;
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
     public Long getId() {
@@ -77,6 +81,22 @@ public class EcoIsland {
 
     public void setBuildingId(String buildingId) {
         this.buildingId = buildingId;
+    }
+
+    public Integer getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(Integer xPos) {
+        this.xPos = xPos;
+    }
+
+    public Integer getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(Integer yPos) {
+        this.yPos = yPos;
     }
 
     @Override
