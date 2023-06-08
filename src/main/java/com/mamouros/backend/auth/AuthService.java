@@ -25,7 +25,7 @@ public class AuthService {
             user = userService.saveUserFromFenix(fenix);
         }
 
-        //user = userService.findByUsername("ist123451");
+        //user = userService.findByUsername("ist123452");
 
         String token = jwtService.generateToken(user);
 
