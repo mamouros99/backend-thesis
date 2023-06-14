@@ -8,10 +8,8 @@ import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.exceptions.UserNotFoundException;
 import com.mamouros.backend.helpers.GlobalHelper;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,7 +98,7 @@ public class BuildingController {
         return null;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_VIEWER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping(path = "/add/{username}")
     public @ResponseBody String addNewBuilding(@RequestBody UserBuildingsDto userBuildingsDto, @PathVariable String username){
 
