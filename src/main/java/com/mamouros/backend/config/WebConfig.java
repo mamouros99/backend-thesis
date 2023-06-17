@@ -1,5 +1,6 @@
 package com.mamouros.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -9,9 +10,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    private final String[] allowedOrigins = {"http://localhost:8081",  "http://localhost:8080"};
+    @Value("${my.ip:Unknown}")
+    private String ip;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+
+        final String[] allowedOrigins = { ip + ":8081",  ip + ":8080"};
+
         registry.addMapping("/ecoisland/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET","POST","PUT","DELETE");

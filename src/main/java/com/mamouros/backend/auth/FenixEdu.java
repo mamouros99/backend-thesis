@@ -9,13 +9,13 @@ public class FenixEdu {
 
     private JsonObject person;
 
-    public FenixEdu() {
-
+    public FenixEdu(String baseUrl, String oauthConsumerKey, String oauthConsumerSecret, String callbackUrl) {
         try{
-            ApplicationConfiguration config =  ApplicationConfiguration.fromPropertyFilename("/fenixedu.properties");
+            ApplicationConfiguration config =  new ApplicationConfiguration(baseUrl, oauthConsumerKey, oauthConsumerSecret, callbackUrl);
             client = new FenixEduClientImpl(config);
         }
         catch (Exception e){
+            e.printStackTrace();
             throw new RuntimeException("Unable to connect to IST");
         }
     }

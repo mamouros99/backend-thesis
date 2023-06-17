@@ -130,6 +130,11 @@ public class BuildingController {
         return user.getBuildings();
     }
 
+    @GetMapping(path = "/test/banana")
+    public @ResponseBody String testConnection(){
+        return "test";
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path = "/mybuildings")
     public @ResponseBody Iterable<UserBuildings> getMyBuildings(){
