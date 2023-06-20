@@ -9,6 +9,7 @@ import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.exceptions.UserNotFoundException;
 import com.mamouros.backend.helpers.GlobalHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,10 @@ public class BuildingController {
 
     @Autowired
     UsersRepository usersRepository;
+
+    @Value("${my.ip:Unknown}")
+    private String ip;
+
 
     @GetMapping(path="/all")
     public @ResponseBody Object getBuildings(){
@@ -132,6 +137,9 @@ public class BuildingController {
 
     @GetMapping(path = "/test/banana")
     public @ResponseBody String testConnection(){
+
+        System.out.println(ip);
+
         return "test";
     }
 
