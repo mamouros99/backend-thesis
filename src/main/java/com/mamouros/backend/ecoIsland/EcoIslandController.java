@@ -2,6 +2,7 @@ package com.mamouros.backend.ecoIsland;
 
 import com.mamouros.backend.auth.User.Role;
 import com.mamouros.backend.auth.User.User;
+import com.mamouros.backend.exceptions.DuplicateIdentifierException;
 import com.mamouros.backend.exceptions.IslandNotFoundException;
 import com.mamouros.backend.exceptions.WrongFileException;
 import com.mamouros.backend.helpers.CSVService;
@@ -28,17 +29,22 @@ public class EcoIslandController {
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @PostMapping(path="/add")
     public @ResponseBody void addNewEcoIsland(@RequestBody EcoIsland ecoIsland){
-        ecoIslandService.save(ecoIsland);
+        try {
+            ecoIslandService.findById(ecoIsland.getId());
+            throw new DuplicateIdentifierException(ecoIsland.getIdentifier());
+        } catch (IslandNotFoundException e){
+            ecoIslandService.save(ecoIsland);
+        }
     }
 
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public @ResponseBody void deleteEcoIslandById(@PathVariable Long id){
+    public @ResponseBody void deleteEcoIslandById(@PathVariable String id){
         ecoIslandService.deleteById(id);
     }
 
     @GetMapping(path="/{id}")
-    public @ResponseBody EcoIsland getEcoIslandById(@PathVariable Long id){
+    public @ResponseBody EcoIsland getEcoIslandById(@PathVariable String id){
         return ecoIslandService.findById(id);
     }
 

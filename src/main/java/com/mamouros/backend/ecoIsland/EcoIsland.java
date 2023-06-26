@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "ECO_ISLANDS")
 public class EcoIsland {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     @Column(name = "building_name", nullable = false)
     private String building;
@@ -23,13 +22,16 @@ public class EcoIsland {
     @Column(name = "bins",length = 2, nullable = false)
     private String bins;
 
+    @Column(name = "identifier", nullable = false)
+    private String identifier;
     private Integer xPos;
     private Integer yPos;
 
     public EcoIsland() {
     }
 
-    public EcoIsland(String building, String buildingId, String floor, String description, String bins, Integer xPos, Integer yPos ) {
+    public EcoIsland(String id, String building, String buildingId, String floor, String description, String bins, Integer xPos, Integer yPos, String identifier ) {
+        this.id = id;
         this.building = building;
         this.floor = floor;
         this.description = description;
@@ -37,9 +39,20 @@ public class EcoIsland {
         this.buildingId = buildingId;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.identifier = identifier;
     }
 
-    public Long getId() {
+    public EcoIsland(String id, String building, String buildingId, String floor, String description, String bins, String identifier ) {
+        this.id = id;
+        this.building = building;
+        this.floor = floor;
+        this.description = description;
+        this.bins = bins;
+        this.buildingId = buildingId;
+        this.identifier = identifier;
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -61,6 +74,9 @@ public class EcoIsland {
 
     public void setBuilding(String building) {
         this.building = building;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setFloor(String floor) {
@@ -97,6 +113,14 @@ public class EcoIsland {
 
     public void setyPos(Integer yPos) {
         this.yPos = yPos;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     @Override

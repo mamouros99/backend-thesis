@@ -37,11 +37,11 @@ public class EcoIslandService {
         ecoIslandRepository.save(ecoIsland);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         ecoIslandRepository.deleteById(id);
     }
 
-    public EcoIsland findById(Long id) {
+    public EcoIsland findById(String id) {
         return ecoIslandRepository.findById(id)
                 .orElseThrow(() -> new IslandNotFoundException(id));
     }

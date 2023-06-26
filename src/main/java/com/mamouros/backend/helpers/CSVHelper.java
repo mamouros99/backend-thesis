@@ -1,6 +1,5 @@
 package com.mamouros.backend.helpers;
 
-import com.mamouros.backend.BackendApplication;
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.exceptions.BadCSVFileException;
 import com.mamouros.backend.reports.Report;
@@ -9,8 +8,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -29,7 +26,7 @@ public class CSVHelper {
 
     public static List<EcoIsland> csvToEcoIsland(InputStream is) {
         //Must remove start bytes from excel files
-        try (Reader fileReader = new InputStreamReader(new BOMInputStream(is), StandardCharsets.UTF_8);
+        try (Reader fileReader = new InputStreamReader(new BOMInputStream(is), StandardCharsets.ISO_8859_1);
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.EXCEL.withHeader())) {
 
@@ -39,17 +36,32 @@ public class CSVHelper {
 
 
             for (CSVRecord csvRecord : csvRecords) {
+                EcoIsland ecoIsland;
 
-                EcoIsland ecoIsland = new EcoIsland(
-                        csvRecord.get("building"),
-                        csvRecord.get("buildingId"),
-                        csvRecord.get("floor"),
-                        csvRecord.get("description"),
-                        csvRecord.get("bins"),
-                        Integer.parseInt(csvRecord.get("xPos")),
-                        Integer.parseInt(csvRecord.get("yPos"))
-                );
-
+                if(csvRecord.get("xPos").length() == 0 || csvRecord.get("yPos").length() == 0){
+                    ecoIsland = new EcoIsland(
+                            csvRecord.get("id"),
+                            csvRecord.get("building"),
+                            csvRecord.get("buildingId"),
+                            csvRecord.get("floor"),
+                            csvRecord.get("description"),
+                            csvRecord.get("bins"),
+                            csvRecord.get("identifier")
+                    );
+                }
+                else {
+                    ecoIsland = new EcoIsland(
+                            csvRecord.get("id"),
+                            csvRecord.get("building"),
+                            csvRecord.get("buildingId"),
+                            csvRecord.get("floor"),
+                            csvRecord.get("description"),
+                            csvRecord.get("bins"),
+                            Integer.parseInt(csvRecord.get("xPos")),
+                            Integer.parseInt(csvRecord.get("yPos")),
+                            csvRecord.get("identifier")
+                    );
+                }
                 ecoIslandList.add(ecoIsland);
             }
 
@@ -58,6 +70,7 @@ public class CSVHelper {
 
             return ecoIslandList;
         } catch (IllegalArgumentException e){
+            e.printStackTrace();
             throw new BadCSVFileException(e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
@@ -68,7 +81,6 @@ public class CSVHelper {
         String[] csvHeader = {
                 "id", "ecoislandId", "separation", "full", "dirty", "message", "time"
         };
-        ByteArrayInputStream byteArrayOutputStream = null;
 
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -101,7 +113,7 @@ public class CSVHelper {
 
     public static ByteArrayOutputStream EcoislandsToCSV(List<EcoIsland> ecoIslands) {
         String[] csvHeader = {
-                "id", "building", "buildingId", "floor", "description", "bins", "xPos", "yPos"
+                "id", "building", "buildingId", "floor", "description", "bins", "xPos", "yPos", "identifier"
         };
         ByteArrayInputStream byteArrayOutputStream = null;
 
@@ -117,7 +129,10 @@ public class CSVHelper {
                         ecoisland.getBuildingId(),
                         ecoisland.getFloor(),
                         ecoisland.getDescription(),
-                        ecoisland.getBins()
+                        ecoisland.getBins(),
+                        ecoisland.getxPos(),
+                        ecoisland.getyPos(),
+                        ecoisland.getIdentifier()
                 );
             }
 

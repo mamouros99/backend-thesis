@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ReportDto implements Serializable {
     private Long id;
 
-    private Long ecoIslandId;
+    private String ecoIslandId;
     private  String separation;
     private  String full;
 
@@ -30,11 +30,11 @@ public class ReportDto implements Serializable {
         return id;
     }
 
-    public Long getEcoIslandId() {
+    public String getEcoIslandId() {
         return ecoIslandId;
     }
 
-    public void setEcoIslandId(Long ecoIslandId) {
+    public void setEcoIslandId(String ecoIslandId) {
         this.ecoIslandId = ecoIslandId;
     }
 
