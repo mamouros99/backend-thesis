@@ -1,20 +1,11 @@
 package com.mamouros.backend.ecoIsland;
 
-import com.mamouros.backend.auth.User.Role;
-import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.exceptions.DuplicateIdentifierException;
 import com.mamouros.backend.exceptions.IslandNotFoundException;
-import com.mamouros.backend.exceptions.WrongFileException;
-import com.mamouros.backend.helpers.CSVService;
-import com.mamouros.backend.helpers.CSVHelper;
-
-import com.mamouros.backend.helpers.GlobalHelper;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
