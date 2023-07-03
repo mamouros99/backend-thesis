@@ -61,16 +61,11 @@ public class ReportService {
 
         for (String email: emails) {
 
-            System.out.println("Um relatório foi efetuado às " +
+            emailService.sendEmail(email, "Novo Relatório no Edifício: " + ecoIsland.getBuilding(), "Um relatório foi efetuado às " +
                     Instant.ofEpochMilli(Long.parseLong(reportDto.getTime())).atZone(ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss d-MM-yyyy "))
                     + ". \n " +
                     "Para aceder ao relatório siga o link: " + myURL + "/report/" + n.getId() + "\n" +
                     "Para aceder à ecoílha siga o link: " + myURL + "/ecoisland/" + ecoIsland.getId());
-
-           /* emailService.sendEmail(email, "Novo Relatório no Edifício: " + ecoIsland.getBuilding(), "Um relatório foi efetuado às " +
-                    Instant.ofEpochMilli(Long.parseLong(reportDto.getTime())).atZone(ZoneId.systemDefault()).toLocalDate()
-            + ". \n Para aceder " +
-                    "a mais informações aceda a " + reportUrl + "/" + n.getId());*/
         }
     }
 
