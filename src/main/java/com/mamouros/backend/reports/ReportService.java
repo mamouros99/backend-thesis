@@ -2,17 +2,22 @@ package com.mamouros.backend.reports;
 
 import com.mamouros.backend.auth.User.Role;
 import com.mamouros.backend.auth.User.User;
+import com.mamouros.backend.buildings.UserBuildingsRepository;
 import com.mamouros.backend.ecoIsland.EcoIsland;
 import com.mamouros.backend.ecoIsland.EcoIslandRepository;
+import com.mamouros.backend.email.EmailService;
 import com.mamouros.backend.exceptions.ReportNotFoundException;
 import com.mamouros.backend.helpers.CSVService;
 import com.mamouros.backend.helpers.GlobalHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -25,7 +30,17 @@ public class ReportService {
     private EcoIslandRepository ecoIslandRepository;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserBuildingsRepository buildingsRepository;
+
+
+    @Autowired
     private CSVService csvService;
+
+    @Value("${my.url}")
+    private String myURL;
 
     public void addReport(ReportDto reportDto){
         EcoIsland ecoIsland = ecoIslandRepository.findById(reportDto.getEcoIslandId()).orElseThrow(RuntimeException::new);
@@ -40,6 +55,23 @@ public class ReportService {
         );
 
         reportRepository.save(n);
+
+        //Send Email to all Editors of building.
+        List<String> emails = (List<String>) buildingsRepository.findAllUsersByBuildingNameThatReceiveEmails(ecoIsland.getBuilding());
+
+        for (String email: emails) {
+
+            System.out.println("Um relatório foi efetuado às " +
+                    Instant.ofEpochMilli(Long.parseLong(reportDto.getTime())).atZone(ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss d-MM-yyyy "))
+                    + ". \n " +
+                    "Para aceder ao relatório siga o link: " + myURL + "/report/" + n.getId() + "\n" +
+                    "Para aceder à ecoílha siga o link: " + myURL + "/ecoisland/" + ecoIsland.getId());
+
+           /* emailService.sendEmail(email, "Novo Relatório no Edifício: " + ecoIsland.getBuilding(), "Um relatório foi efetuado às " +
+                    Instant.ofEpochMilli(Long.parseLong(reportDto.getTime())).atZone(ZoneId.systemDefault()).toLocalDate()
+            + ". \n Para aceder " +
+                    "a mais informações aceda a " + reportUrl + "/" + n.getId());*/
+        }
     }
 
     public Iterable<Report> getAllReports(){
@@ -50,11 +82,6 @@ public class ReportService {
         else {
             return reportRepository.findAll();
         }
-    }
-
-    public Iterable<Report> allReports(){
-
-            return reportRepository.findAll();
     }
 
     public void deleteById(Long id) {
@@ -68,7 +95,6 @@ public class ReportService {
     }
 
     public ResponseEntity<Resource> exportReports() {
-        //TODO Change this to getAllReports
         List<Report> reports = (List<Report>) getAllReports();
         return csvService.exportReports(reports, "reports.csv");
     }

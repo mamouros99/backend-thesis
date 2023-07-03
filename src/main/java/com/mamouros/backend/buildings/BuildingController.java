@@ -9,7 +9,6 @@ import com.mamouros.backend.auth.User.UsersRepository;
 import com.mamouros.backend.exceptions.UserNotFoundException;
 import com.mamouros.backend.helpers.GlobalHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +30,6 @@ public class BuildingController {
 
     @Autowired
     UsersRepository usersRepository;
-
-    @Value("${my.ip:Unknown}")
-    private String ip;
-
 
     @GetMapping(path="/all")
     public @ResponseBody Object getBuildings(){
@@ -118,6 +113,7 @@ public class BuildingController {
             UserBuildings userBuildings = new UserBuildings();
             userBuildings.setId(new BuildingId(userBuildingsDto.getId(), user));
             userBuildings.setName(userBuildingsDto.getName());
+            userBuildings.setReceiveEmails(true);
 
             user.getBuildings().add(userBuildings);
 
@@ -135,10 +131,8 @@ public class BuildingController {
         return user.getBuildings();
     }
 
-    @GetMapping(path = "/test/banana")
+    @GetMapping(path = "/test/")
     public @ResponseBody String testConnection(){
-
-        System.out.println(ip);
 
         return "test";
     }
@@ -163,6 +157,16 @@ public class BuildingController {
         usersRepository.save(user);
 
         userBuildingsRepository.deleteById(new BuildingId(buildingId, user));
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
+    @PutMapping("/{buildingId}/emailstatus")
+    public @ResponseBody void changeReceiveEmailStatus(@PathVariable String buildingId){
+        User user = GlobalHelper.getUserFromSecurityContext();
+
+        UserBuildings userBuildings = userBuildingsRepository.findUserBuildingsById(new BuildingId(buildingId, user));
+        userBuildings.setReceiveEmails(!userBuildings.getReceiveEmails());
+        userBuildingsRepository.save(userBuildings);
     }
 
 

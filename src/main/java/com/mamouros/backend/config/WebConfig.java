@@ -10,13 +10,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${my.ip:Unknown}")
-    private String ip;
+    @Value("${my.url:Unknown}")
+    private String myURL;
+
+    @Value("${mobile.url:Unknown}")
+    private String mobileURL;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
-        final String[] allowedOrigins = { ip + ":8081",  ip + ":8080"};
+        final String[] allowedOrigins = { myURL,  mobileURL};
 
         registry.addMapping("/ecoisland/**")
                 .allowedOrigins(allowedOrigins)
@@ -32,6 +35,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET","POST","PUT","DELETE");
         registry.addMapping("/building/**")
                 .allowedOrigins(allowedOrigins[0])
-                .allowedMethods("GET", "POST", "DELETE");
+                .allowedMethods("GET", "POST", "DELETE", "PUT");
     }
 }
