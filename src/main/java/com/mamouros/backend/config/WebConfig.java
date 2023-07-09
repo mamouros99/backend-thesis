@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${my.url:Unknown}")
+    @Value("${desktop.url:Unknown}")
     private String myURL;
 
     @Value("${mobile.url:Unknown}")

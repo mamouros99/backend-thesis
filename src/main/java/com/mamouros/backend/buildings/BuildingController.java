@@ -22,7 +22,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 @Controller
-@RequestMapping(path = "/building")
+@RequestMapping( "/building")
 public class BuildingController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class BuildingController {
                 throw new RuntimeException("Unable to recover buildings");
             }
 
-            String aux = htmlRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + id);
+            String aux = httpRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + id);
             JsonObject obj = JsonParser.parseString(aux).getAsJsonObject();
             return obj.get("containedSpaces").getAsJsonArray().toString();
 
@@ -56,7 +56,7 @@ public class BuildingController {
     public @ResponseBody Object getBuildingsById(@PathVariable String id){
         try{
 
-            String aux = htmlRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + id);
+            String aux = httpRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces/" + id);
             return JsonParser.parseString(aux).getAsJsonObject().toString();
 
         } catch (Exception e){
@@ -131,7 +131,7 @@ public class BuildingController {
         return user.getBuildings();
     }
 
-    @GetMapping(path = "/test/")
+    @GetMapping(path = "/test")
     public @ResponseBody String testConnection(){
 
         return "test";
@@ -170,12 +170,12 @@ public class BuildingController {
     }
 
 
-    public String htmlRequest(String requestUrl) throws IOException {
+    public String httpRequest(String requestUrl) throws IOException {
         URL url = new URL(requestUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-        con.setConnectTimeout(2000);
-        con.setReadTimeout(2000);
+        con.setConnectTimeout(5000);
+        con.setReadTimeout(5000);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
@@ -191,7 +191,7 @@ public class BuildingController {
     }
 
     private String getAlamedaId() throws IOException {
-        String allCampuses = htmlRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces");
+        String allCampuses = httpRequest("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/spaces");
         Object object = JsonParser.parseString(allCampuses);
         JsonArray jsonArray = (JsonArray) object;
         for (int i = 0; i < jsonArray.size(); i++) {

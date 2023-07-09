@@ -39,7 +39,7 @@ public class ReportService {
     @Autowired
     private CSVService csvService;
 
-    @Value("${my.url}")
+    @Value("${desktop.url}")
     private String myURL;
 
     public void addReport(ReportDto reportDto){
