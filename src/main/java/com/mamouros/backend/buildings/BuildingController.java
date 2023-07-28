@@ -22,7 +22,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 @Controller
-@RequestMapping( "/building")
+@RequestMapping(path = "/building")
 public class BuildingController {
 
     @Autowired
