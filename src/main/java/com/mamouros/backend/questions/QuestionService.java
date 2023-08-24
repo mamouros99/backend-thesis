@@ -22,9 +22,14 @@ public class QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public void addNewQuestion() {
+    public void addNewQuestion(Question question) {
 
 
-        questionRepository.save(new Question());
+        questionRepository.save(question);
+    }
+
+    public Iterable<Question> getAllQuestions() {
+
+        return questionRepository.findAll();
     }
 }

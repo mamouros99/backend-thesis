@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/building/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/ecoisland/**"  ).permitAll()
                 .requestMatchers(HttpMethod.POST , "/report/add"  ).permitAll()
+                .requestMatchers(HttpMethod.POST, "/question/add").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -11,8 +11,13 @@ public class QuestionController {
     private QuestionService questionService;
 
     @PostMapping( "/add")
-    public @ResponseBody void addNewQuestion(@RequestBody String email){
-        questionService.addNewQuestion();
+    public @ResponseBody void addNewQuestion(@RequestBody QuestionDto questionDto){
+        System.out.println(questionDto);
+        Question question = new Question();
+        question.setQuestion(questionDto.getQuestion());
+        question.setTime(questionDto.getTime());
+        question.setEmail(questionDto.getEmail());
+        questionService.addNewQuestion(question);
     }
 
     @DeleteMapping( "/delete/{id}")
@@ -24,4 +29,14 @@ public class QuestionController {
     public @ResponseBody Question getQuestionById(@PathVariable Long id){
         return questionService.getQuestionById(id);
     }
+
+    @GetMapping("/get/all")
+    public @ResponseBody Iterable<Question> getAllQuestions(){
+        Iterable<Question> questions = questionService.getAllQuestions();
+        for (Question question: questions){
+            System.out.println(question);
+        }
+        return questions;
+    }
+
 }

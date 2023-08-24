@@ -10,14 +10,22 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String question;
 
     private String answer;
 
-    @ManyToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
-    @JsonManagedReference
-    private User questioner;
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String time;
+
+    private Boolean checked;
+
+    public Question() {
+        this.checked = false;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -43,11 +51,31 @@ public class Question {
         this.answer = answer;
     }
 
-    public User getQuestioner() {
-        return questioner;
+    public String getEmail() {
+        return email;
     }
 
-    public void setQuestioner(User questioner) {
-        this.questioner = questioner;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                ", email='" + email + '\'' +
+                ", time='" + time + '\'' +
+                ", checked=" + checked +
+                '}';
     }
 }
