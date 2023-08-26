@@ -32,11 +32,15 @@ public class QuestionController {
 
     @GetMapping("/get/all")
     public @ResponseBody Iterable<Question> getAllQuestions(){
-        Iterable<Question> questions = questionService.getAllQuestions();
-        for (Question question: questions){
-            System.out.println(question);
-        }
-        return questions;
+
+        return questionService.getAllQuestions();
+    }
+
+    @PutMapping("/put")
+    public @ResponseBody void addAnswerToQuestion(@RequestBody Question question ){
+
+        question.setChecked(true);
+        questionService.updateQuestion(question);
     }
 
 }
