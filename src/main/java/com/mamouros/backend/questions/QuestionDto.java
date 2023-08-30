@@ -6,7 +6,6 @@ public class QuestionDto implements Serializable {
 
     private String question;
     private String time;
-
     private String email;
 
     public QuestionDto(String question, String email, String time) {

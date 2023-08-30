@@ -1,8 +1,10 @@
 package com.mamouros.backend.questions;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mamouros.backend.auth.User.User;
+import com.mamouros.backend.questions.Answer.Answer;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Question {
@@ -13,18 +15,23 @@ public class Question {
     @Column(nullable = false)
     private String question;
 
-    private String answer;
+    @OneToMany( mappedBy = "question")
+    private List<Answer> answers;
 
-    @Column(nullable = false)
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
 
     @Column(nullable = false)
     private String time;
 
-    private Boolean checked;
+    @Column(nullable = false)
+    private Boolean archived;
 
     public Question() {
-        this.checked = false;
+        this.archived = false;
     }
 
     public void setId(Long id) {
@@ -43,12 +50,18 @@ public class Question {
         this.question = question;
     }
 
-    public String getAnswer() {
-        return answer;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void addAnswer(Answer answer){
+
+        this.answers.add(answer);
+
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     public String getEmail() {
@@ -67,12 +80,12 @@ public class Question {
         this.time = time;
     }
 
-    public Boolean getChecked() {
-        return checked;
+    public Boolean getArchived() {
+        return archived;
     }
 
-    public void setChecked(Boolean checked) {
-        this.checked = checked;
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
     }
 
     @Override
@@ -80,10 +93,10 @@ public class Question {
         return "Question{" +
                 "id=" + id +
                 ", question='" + question + '\'' +
-                ", answer='" + answer + '\'' +
+                ", answers=" + answers +
                 ", email='" + email + '\'' +
                 ", time='" + time + '\'' +
-                ", checked=" + checked +
+                ", archived=" + archived +
                 '}';
     }
 }

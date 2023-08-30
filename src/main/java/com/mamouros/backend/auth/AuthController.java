@@ -15,21 +15,42 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Value("${base.url}")
-    private String baseUrl;
+    @Value("${desktop.base.url}")
+    private String desktopBaseUrl;
 
-    @Value("${oauth.consumer.key}")
-    private String oauthConsumerKey;
+    @Value("${mobile.base.url}")
+    private String mobileBaseUrl;
 
-    @Value("${oauth.consumer.secret}")
-    private String oauthConsumerSecret;
+    @Value("${desktop.oauth.consumer.key}")
+    private String desktopOauthConsumerKey;
 
-    @Value("${callback.url}")
-    private String callbackUrl;
-   @GetMapping("/fenix/{code}")
-    public @ResponseBody AuthResponseDto fenixAuth(@PathVariable String code) {
+    @Value("${mobile.oauth.consumer.key}")
+    private String mobileOauthConsumerKey;
 
-        FenixEdu fenix = new FenixEdu(baseUrl, oauthConsumerKey, oauthConsumerSecret, callbackUrl);
+    @Value("${desktop.oauth.consumer.secret}")
+    private String desktopOauthConsumerSecret;
+
+    @Value("${mobile.oauth.consumer.secret}")
+    private String mobileOauthConsumerSecret;
+
+    @Value("${desktop.callback.url}")
+    private String desktopCallbackUrl;
+
+    @Value("${mobile.callback.url}")
+    private String mobileCallbackUrl;
+   @GetMapping("/fenix/desktop/{code}")
+    public @ResponseBody AuthResponseDto fenixAuthDesktop(@PathVariable String code) {
+
+        FenixEdu fenix = new FenixEdu(desktopBaseUrl, desktopOauthConsumerKey, desktopOauthConsumerSecret, desktopCallbackUrl);
+        fenix.setPerson(code);
+        //check if on db
+        return authService.fenixAuth(fenix);
+    }
+
+    @GetMapping("/fenix/mobile/{code}")
+    public @ResponseBody AuthResponseDto fenixAuthMobile(@PathVariable String code) {
+
+        FenixEdu fenix = new FenixEdu(mobileBaseUrl, mobileOauthConsumerKey, mobileOauthConsumerSecret, mobileCallbackUrl);
         fenix.setPerson(code);
         //check if on db
         return authService.fenixAuth(fenix);

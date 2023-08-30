@@ -1,5 +1,6 @@
 package com.mamouros.backend.questions;
 
+import com.mamouros.backend.questions.Answer.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +15,20 @@ public class QuestionController {
     public @ResponseBody void addNewQuestion(@RequestBody QuestionDto questionDto){
         System.out.println(questionDto);
         Question question = new Question();
-        question.setQuestion(questionDto.getQuestion());
-        question.setTime(questionDto.getTime());
-        question.setEmail(questionDto.getEmail());
+            question.setQuestion(questionDto.getQuestion());
+            question.setTime(questionDto.getTime());
+            question.setEmail(questionDto.getEmail());
         questionService.addNewQuestion(question);
     }
 
     @DeleteMapping( "/delete/{id}")
     public @ResponseBody void deleteQuestion(@PathVariable Long id){
         questionService.deleteQuestion(id);
+    }
+
+    @PostMapping("/answer/{question_id}")
+    public @ResponseBody void AddNewAnswer(@PathVariable Long question_id, @RequestBody Answer answer){
+        questionService.addNewAnswer(question_id, answer);
     }
 
     @GetMapping("/get/{id}")
@@ -39,7 +45,7 @@ public class QuestionController {
     @PutMapping("/put")
     public @ResponseBody void addAnswerToQuestion(@RequestBody Question question ){
 
-        question.setChecked(true);
+        question.setArchived(true);
         questionService.updateQuestion(question);
     }
 
