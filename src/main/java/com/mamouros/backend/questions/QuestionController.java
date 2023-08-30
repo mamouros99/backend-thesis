@@ -1,5 +1,7 @@
 package com.mamouros.backend.questions;
 
+import com.mamouros.backend.auth.User.User;
+import com.mamouros.backend.auth.User.UserService;
 import com.mamouros.backend.questions.Answer.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,13 +13,24 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping( "/add")
     public @ResponseBody void addNewQuestion(@RequestBody QuestionDto questionDto){
-        System.out.println(questionDto);
+
+
+
         Question question = new Question();
             question.setQuestion(questionDto.getQuestion());
             question.setTime(questionDto.getTime());
             question.setEmail(questionDto.getEmail());
+
+        if(questionDto.getUsername() != null) {
+            User user = userService.findByUsername(questionDto.getUsername());
+            question.setUser(user);
+        }
+
         questionService.addNewQuestion(question);
     }
 
@@ -40,6 +53,12 @@ public class QuestionController {
     public @ResponseBody Iterable<Question> getAllQuestions(){
 
         return questionService.getAllQuestions();
+    }
+
+    @GetMapping("/get/all/{username}")
+    public @ResponseBody Iterable<Question> getAllQuestionsByUsername(@PathVariable String username){
+
+        return questionService.getAllQuestionsByUsername(username);
     }
 
     @PutMapping("/put")

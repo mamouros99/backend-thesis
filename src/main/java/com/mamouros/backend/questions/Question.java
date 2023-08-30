@@ -88,13 +88,21 @@ public class Question {
         this.archived = archived;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", question='" + question + '\'' +
-                ", answers=" + answers +
                 ", email='" + email + '\'' +
+                ", user=" + user.getUsername() +
                 ", time='" + time + '\'' +
                 ", archived=" + archived +
                 '}';

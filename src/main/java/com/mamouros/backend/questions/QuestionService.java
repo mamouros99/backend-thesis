@@ -62,4 +62,9 @@ public class QuestionService {
         questionRepository.save(question);
 
     }
+
+    public Iterable<Question> getAllQuestionsByUsername(String username) {
+
+        return questionRepository.findAllByUsername(username);
+    }
 }
