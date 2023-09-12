@@ -3,6 +3,7 @@ package com.mamouros.backend.questions;
 
 import com.mamouros.backend.exceptions.QuestionNotFoundException;
 import com.mamouros.backend.questions.Answer.Answer;
+import com.mamouros.backend.questions.Answer.AnswerDto;
 import com.mamouros.backend.questions.Answer.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,9 +54,21 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void addNewAnswer(Long questionId, Answer answer) {
+    public void addNewAnswer(Long questionId, AnswerDto answerDto) {
 
         Question question = getQuestionById(questionId);
+
+        if(question.getArchived())
+            return;
+
+        Answer answer = new Answer();
+        answer.setQuestion(question);
+        answer.setFromApp(answerDto.getFromApp());
+        answer.setText(answerDto.getText());
+        answer.setTime(answerDto.getTime());
+        answer.setViewed(false);
+
+
         question.addAnswer(answer);
 
         answerRepository.save(answer);
@@ -66,5 +79,13 @@ public class QuestionService {
     public Iterable<Question> getAllQuestionsByUsername(String username) {
 
         return questionRepository.findAllByUsername(username);
+    }
+
+    public void archiveQuestion(Long id) {
+
+        Question question = getQuestionById(id);
+        question.setArchived(true);
+        questionRepository.save(question);
+
     }
 }

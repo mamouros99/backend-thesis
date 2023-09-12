@@ -1,24 +1,26 @@
 package com.mamouros.backend.questions.Answer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mamouros.backend.questions.Question;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Answer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String text;
 
     private String time;
 
+    private boolean fromApp;
     private boolean viewed;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
@@ -63,5 +65,13 @@ public class Answer {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public boolean isFromApp() {
+        return fromApp;
+    }
+
+    public void setFromApp(boolean fromApp) {
+        this.fromApp = fromApp;
     }
 }

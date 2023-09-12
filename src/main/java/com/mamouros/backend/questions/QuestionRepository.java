@@ -10,8 +10,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
 
     @Query(
-            value = "select * from questions " +
-                    "where questions.username = :name",
+            value = "select * from question " +
+                    "where question.username = :name",
             nativeQuery = true)
     Iterable<Question> findAllByUsername(@Param("name") String name);
 }

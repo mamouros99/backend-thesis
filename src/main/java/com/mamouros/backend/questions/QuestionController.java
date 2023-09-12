@@ -3,6 +3,7 @@ package com.mamouros.backend.questions;
 import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UserService;
 import com.mamouros.backend.questions.Answer.Answer;
+import com.mamouros.backend.questions.Answer.AnswerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,6 @@ public class QuestionController {
 
     @PostMapping( "/add")
     public @ResponseBody void addNewQuestion(@RequestBody QuestionDto questionDto){
-
-
 
         Question question = new Question();
             question.setQuestion(questionDto.getQuestion());
@@ -40,7 +39,7 @@ public class QuestionController {
     }
 
     @PostMapping("/answer/{question_id}")
-    public @ResponseBody void AddNewAnswer(@PathVariable Long question_id, @RequestBody Answer answer){
+    public @ResponseBody void AddNewAnswer(@PathVariable Long question_id, @RequestBody AnswerDto answer){
         questionService.addNewAnswer(question_id, answer);
     }
 
@@ -49,17 +48,22 @@ public class QuestionController {
         return questionService.getQuestionById(id);
     }
 
-    @GetMapping("/get/all")
-    public @ResponseBody Iterable<Question> getAllQuestions(){
-
-        return questionService.getAllQuestions();
+    @PutMapping("/archive/{id}")
+    public @ResponseBody void archiveQuestion(@PathVariable Long id){
+         questionService.archiveQuestion(id);
     }
 
     @GetMapping("/get/all/{username}")
     public @ResponseBody Iterable<Question> getAllQuestionsByUsername(@PathVariable String username){
-
         return questionService.getAllQuestionsByUsername(username);
     }
+
+    @GetMapping("/get/all")
+    public @ResponseBody Iterable<Question> getAllQuestions(){
+        return questionService.getAllQuestions();
+    }
+
+
 
     @PutMapping("/put")
     public @ResponseBody void addAnswerToQuestion(@RequestBody Question question ){

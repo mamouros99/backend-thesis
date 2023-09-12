@@ -1,5 +1,6 @@
 package com.mamouros.backend.questions;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.questions.Answer.Answer;
 import jakarta.persistence.*;
@@ -20,7 +21,8 @@ public class Question {
 
     private String email;
 
-    @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private User user;
 
