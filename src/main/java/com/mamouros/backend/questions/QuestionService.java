@@ -88,4 +88,12 @@ public class QuestionService {
         questionRepository.save(question);
 
     }
+
+    public void unarchiveQuestion(Long id) {
+        Question question = getQuestionById(id);
+        question.setArchived(false);
+        questionRepository.save(question);
+    }
+
+
 }

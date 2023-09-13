@@ -19,8 +19,6 @@ public class Question {
     @OneToMany( mappedBy = "question")
     private List<Answer> answers;
 
-    private String email;
-
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
@@ -66,14 +64,6 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getTime() {
         return time;
     }
@@ -103,7 +93,6 @@ public class Question {
         return "Question{" +
                 "id=" + id +
                 ", question='" + question + '\'' +
-                ", email='" + email + '\'' +
                 ", user=" + user.getUsername() +
                 ", time='" + time + '\'' +
                 ", archived=" + archived +

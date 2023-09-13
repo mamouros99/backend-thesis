@@ -98,7 +98,7 @@ public class BuildingController {
         return null;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDITOR','ROLE_VIEWER')")
     @PostMapping(path = "/add/{username}")
     public @ResponseBody String addNewBuilding(@RequestBody UserBuildingsDto userBuildingsDto, @PathVariable String username){
 
@@ -148,18 +148,25 @@ public class BuildingController {
         return user.getBuildings();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
     @DeleteMapping("/delete/{username}/{buildingId}")
     public @ResponseBody void deleteBuildingFromUser(@PathVariable String username, @PathVariable String buildingId){
+
+        User requester = GlobalHelper.getUserFromSecurityContext();
+
+        if(!requester.getRole().equals(Role.ADMIN) && !requester.getUsername().equals(username))
+            throw new RuntimeException("You don't have permissions");
+
         User user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
+
         user.getBuildings().removeIf(element -> (element.getId().getId().equals(buildingId)));
         usersRepository.save(user);
 
         userBuildingsRepository.deleteById(new BuildingId(buildingId, user));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
     @PutMapping("/{buildingId}/emailstatus")
     public @ResponseBody void changeReceiveEmailStatus(@PathVariable String buildingId){
         User user = GlobalHelper.getUserFromSecurityContext();

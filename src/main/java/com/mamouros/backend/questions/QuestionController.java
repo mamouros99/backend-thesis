@@ -5,6 +5,7 @@ import com.mamouros.backend.auth.User.UserService;
 import com.mamouros.backend.questions.Answer.Answer;
 import com.mamouros.backend.questions.Answer.AnswerDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,6 @@ public class QuestionController {
         Question question = new Question();
             question.setQuestion(questionDto.getQuestion());
             question.setTime(questionDto.getTime());
-            question.setEmail(questionDto.getEmail());
 
         if(questionDto.getUsername() != null) {
             User user = userService.findByUsername(questionDto.getUsername());
@@ -32,6 +32,7 @@ public class QuestionController {
 
         questionService.addNewQuestion(question);
     }
+
 
     @DeleteMapping( "/delete/{id}")
     public @ResponseBody void deleteQuestion(@PathVariable Long id){
@@ -48,9 +49,17 @@ public class QuestionController {
         return questionService.getQuestionById(id);
     }
 
+
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @PutMapping("/archive/{id}")
     public @ResponseBody void archiveQuestion(@PathVariable Long id){
          questionService.archiveQuestion(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
+    @PutMapping("/unarchive/{id}")
+    public @ResponseBody void unarchiveQuestion(@PathVariable Long id){
+        questionService.unarchiveQuestion(id);
     }
 
     @GetMapping("/get/all/{username}")
@@ -64,12 +73,5 @@ public class QuestionController {
     }
 
 
-
-    @PutMapping("/put")
-    public @ResponseBody void addAnswerToQuestion(@RequestBody Question question ){
-
-        question.setArchived(true);
-        questionService.updateQuestion(question);
-    }
 
 }

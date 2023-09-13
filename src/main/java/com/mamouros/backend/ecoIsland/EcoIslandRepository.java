@@ -13,7 +13,7 @@ public interface EcoIslandRepository extends CrudRepository<EcoIsland, String> {
             value = "select eco_islands.* from user_buildings " +
                     "inner join eco_islands " +
                     "on user_buildings.name = eco_islands.building_name " +
-                    "where user_buildings.name = :name",
+                    "where user_buildings.username = :name",
             nativeQuery = true)
     Iterable<EcoIsland> findAllByUsername(@Param("name") String name);
 
