@@ -30,6 +30,9 @@ public class Question {
     @Column(nullable = false)
     private Boolean archived;
 
+    @Column(nullable = false)
+    private Boolean showQuestion;
+
     public Question() {
         this.archived = false;
     }
@@ -88,6 +91,15 @@ public class Question {
         this.user = user;
     }
 
+
+    public Boolean getShowQuestion() {
+        return showQuestion;
+    }
+
+    public void setShowQuestion(Boolean showToOrigin) {
+        this.showQuestion = showToOrigin;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
@@ -96,6 +108,7 @@ public class Question {
                 ", user=" + user.getUsername() +
                 ", time='" + time + '\'' +
                 ", archived=" + archived +
+                ", showQuestion=" + showQuestion +
                 '}';
     }
 }

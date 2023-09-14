@@ -2,7 +2,6 @@ package com.mamouros.backend.questions;
 
 import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.auth.User.UserService;
-import com.mamouros.backend.questions.Answer.Answer;
 import com.mamouros.backend.questions.Answer.AnswerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +23,7 @@ public class QuestionController {
         Question question = new Question();
             question.setQuestion(questionDto.getQuestion());
             question.setTime(questionDto.getTime());
+            question.setShowQuestion(true);
 
         if(questionDto.getUsername() != null) {
             User user = userService.findByUsername(questionDto.getUsername());
@@ -32,6 +32,7 @@ public class QuestionController {
 
         questionService.addNewQuestion(question);
     }
+
 
 
     @DeleteMapping( "/delete/{id}")
@@ -60,6 +61,12 @@ public class QuestionController {
     @PutMapping("/unarchive/{id}")
     public @ResponseBody void unarchiveQuestion(@PathVariable Long id){
         questionService.unarchiveQuestion(id);
+    }
+
+    //Stop showing question in mobile
+    @PutMapping("/hide/{id}")
+    public @ResponseBody void hideQuestion(@PathVariable Long id){
+        questionService.hideQuestion(id);
     }
 
     @GetMapping("/get/all/{username}")

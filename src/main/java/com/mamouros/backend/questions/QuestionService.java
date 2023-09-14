@@ -1,12 +1,16 @@
 package com.mamouros.backend.questions;
 
 
+import com.mamouros.backend.auth.User.User;
 import com.mamouros.backend.exceptions.QuestionNotFoundException;
+import com.mamouros.backend.helpers.GlobalHelper;
 import com.mamouros.backend.questions.Answer.Answer;
 import com.mamouros.backend.questions.Answer.AnswerDto;
 import com.mamouros.backend.questions.Answer.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class QuestionService {
@@ -48,11 +52,7 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public void updateQuestion(Question question) {
 
-        questionRepository.findById(question.getId()).orElseThrow(() -> new QuestionNotFoundException(question.getId()));
-        questionRepository.save(question);
-    }
 
     public void addNewAnswer(Long questionId, AnswerDto answerDto) {
 
@@ -96,4 +96,17 @@ public class QuestionService {
     }
 
 
+    public void hideQuestion(Long id) {
+        User user = GlobalHelper.getUserFromSecurityContext();
+
+        //check if user is same as the one in question
+        Question question = getQuestionById(id);
+        if (!Objects.equals(question.getUser().getUsername(), user.getUsername())){
+            throw new RuntimeException("You dont have permission to change this question");
+        }
+
+        question.setShowQuestion(false);
+        questionRepository.save(question);
+
+    }
 }
