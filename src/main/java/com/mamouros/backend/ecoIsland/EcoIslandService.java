@@ -8,6 +8,7 @@ import com.mamouros.backend.helpers.CSVHelper;
 import com.mamouros.backend.helpers.CSVService;
 import com.mamouros.backend.helpers.GlobalHelper;
 import com.mamouros.backend.reports.Report;
+import com.mamouros.backend.reports.ReportRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -23,6 +24,9 @@ public class EcoIslandService {
 
     @Autowired
     private EcoIslandRepository ecoIslandRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
 
     @Autowired
     private CSVService csvService;
@@ -68,5 +72,14 @@ public class EcoIslandService {
         else {
             throw new WrongFileException(FilenameUtils.getExtension(file.getOriginalFilename()));
         }
+    }
+
+    public void archiveAllIslandReports(String islandId) {
+
+        List<Report> reports = (List<Report>) reportRepository.findAllByEcoIsland(islandId);
+        for (Report report: reports) {
+            report.setArchived(true);
+        }
+        reportRepository.saveAll(reports);
     }
 }

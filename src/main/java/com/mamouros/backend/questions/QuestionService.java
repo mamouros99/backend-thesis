@@ -2,14 +2,21 @@ package com.mamouros.backend.questions;
 
 
 import com.mamouros.backend.auth.User.User;
+import com.mamouros.backend.auth.User.UsersRepository;
+import com.mamouros.backend.email.EmailService;
 import com.mamouros.backend.exceptions.QuestionNotFoundException;
 import com.mamouros.backend.helpers.GlobalHelper;
 import com.mamouros.backend.questions.Answer.Answer;
 import com.mamouros.backend.questions.Answer.AnswerDto;
 import com.mamouros.backend.questions.Answer.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -20,6 +27,15 @@ public class QuestionService {
 
     @Autowired
     private AnswerRepository answerRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Value("${desktop.url}")
+    private String myURL;
 
     public Question getQuestionById(Long id){
 
@@ -43,8 +59,22 @@ public class QuestionService {
 
     public void addNewQuestion(Question question) {
 
-
         questionRepository.save(question);
+
+        List<User> users = (List<User>) usersRepository.findAllByReceiveQuestionsTrue();
+
+        for (User user: users ) {
+            emailService.sendEmail(user.getEmail(), "Nova pergunta TFaD", "Uma nova pergunta foi efetuada às " +
+                Instant.ofEpochMilli(Long.parseLong(question.getTime())).atZone(ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss d-MM-yyyy"))
+                + ". \n"
+                + "Para aceder à pergunta siga o link: " + myURL + "/question/" + question.getId()
+                + ". \n"
+                + question.getUser().getName() + " enviou a seguinte mensagem: \n"
+                + "\t" + question.getQuestion() + "\n"
+
+            );
+        }
+
     }
 
     public Iterable<Question> getAllQuestions() {
@@ -73,6 +103,23 @@ public class QuestionService {
 
         answerRepository.save(answer);
         questionRepository.save(question);
+
+        if(answer.isFromApp())
+            return;
+
+        List<User> users = (List<User>) usersRepository.findAllByReceiveQuestionsTrue();
+
+        for (User user: users ) {
+            emailService.sendEmail(user.getEmail(), "Nova resposta à pergunta TFaD", "Uma nova resposta foi efetuada às " +
+                    Instant.ofEpochMilli(Long.parseLong(answer.getTime())).atZone(ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss d-MM-yyyy"))
+                    + ". \n"
+                    + "Para aceder à pergunta siga o link: " + myURL + "/question/" + question.getId()
+                    + ". \n"
+                    + question.getUser().getName() + " enviou a seguinte resposta: \n"
+                    + "\t" + answer.getText() + "\n"
+
+            );
+        }
 
     }
 

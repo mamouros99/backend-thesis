@@ -2,6 +2,7 @@ package com.mamouros.backend.auth.User;
 
 import com.mamouros.backend.auth.FenixEdu;
 import com.mamouros.backend.exceptions.UserNotFoundException;
+import com.mamouros.backend.helpers.GlobalHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,17 @@ public class UserService {
     UsersRepository usersRepository;
 
     public User findByUsername(String username){
+
         return usersRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
+    }
+
+    public User findMyUser(){
+
+        User requester = GlobalHelper.getUserFromSecurityContext();
+
+        return findByUsername(requester.getUsername());
+
     }
 
     public User saveUserFromFenix(FenixEdu fenix){
@@ -39,4 +49,18 @@ public class UserService {
         return usersRepository.findAll();
     }
 
+    public void toggleReceiveQuestionById(String username) {
+
+        //check if admin or same username
+        User requester = GlobalHelper.getUserFromSecurityContext();
+
+        if(!requester.getRole().equals(Role.ADMIN) && !requester.getUsername().equals(username))
+            throw new RuntimeException("You don't have permission");
+
+
+        User user = findByUsername(username);
+        user.setReceiveQuestions(!user.getReceiveQuestions());
+        usersRepository.save(user);
+
+    }
 }

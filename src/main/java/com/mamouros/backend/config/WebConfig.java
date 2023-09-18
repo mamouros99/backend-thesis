@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET","POST","PUT","DELETE");
         registry.addMapping("/report/**")
                 .allowedOrigins(allowedOrigins)
-                .allowedMethods("GET","POST","DELETE");
+                .allowedMethods("GET","POST","DELETE","PUT");
         registry.addMapping("/auth/fenix/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET");

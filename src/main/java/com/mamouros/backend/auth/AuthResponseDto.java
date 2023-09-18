@@ -56,4 +56,6 @@ public class AuthResponseDto {
     public void setRole(String role) {
         this.role = role;
     }
+
+
 }

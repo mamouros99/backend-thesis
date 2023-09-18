@@ -24,9 +24,13 @@ public class Report{
 
     private String dirty;
 
+    @Column(nullable = false)
     private String time;
 
     private String message;
+
+    @Column(nullable = false)
+    private Boolean archived;
 
     public Report() {
     }
@@ -38,6 +42,7 @@ public class Report{
         this.dirty = dirty;
         this.time = time;
         this.message = message;
+        this.archived = false;
     }
 
     public Long getId() {
@@ -82,6 +87,15 @@ public class Report{
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+
+    public Boolean getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
     }
 
     @Override

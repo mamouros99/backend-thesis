@@ -62,4 +62,10 @@ public class EcoIslandController {
     public @ResponseBody void updateEcoisland(@RequestBody EcoIsland ecoIsland ){
         ecoIslandService.updateEcoIsland(ecoIsland);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
+    @PutMapping("/archive/{islandId}")
+    public @ResponseBody void archiveAllIslandReports(@PathVariable String islandId ){
+        ecoIslandService.archiveAllIslandReports(islandId);
+    }
 }

@@ -10,4 +10,6 @@ public interface UsersRepository extends JpaRepository<User, String> {
 
     Optional<User> findByUsername(String username);
 
+    Iterable<User> findAllByReceiveQuestionsTrue();
+
 }

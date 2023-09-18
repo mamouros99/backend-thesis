@@ -19,6 +19,12 @@ public class ReportController {
         reportService.addReport(reportDto);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
+    @PutMapping(path = "/archive/{id}")
+    public @ResponseBody void archiveReport(@PathVariable Long id){
+        reportService.archiveReport(id);
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_VIEWER', 'ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Report> getAllReports() {

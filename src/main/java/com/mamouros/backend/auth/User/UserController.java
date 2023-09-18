@@ -24,10 +24,22 @@ public class UserController {
        userService.updateUser( username, role);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
+    @PutMapping("/receiveQuestion/{username}")
+    public @ResponseBody void toggleReceiveQuestionById(@PathVariable String username ){
+       userService.toggleReceiveQuestionById( username);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/get/{username}")
     public @ResponseBody User getUserByID(@PathVariable String username ){
         return userService.findByUsername(username);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
+    @GetMapping("/findMyUser")
+    public @ResponseBody User findMyUser( ){
+        return userService.findMyUser();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

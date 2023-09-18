@@ -93,4 +93,12 @@ public class ReportService {
         List<Report> reports = (List<Report>) getAllReports();
         return csvService.exportReports(reports, "reports.csv");
     }
+
+    public void archiveReport(Long id) {
+
+        Report report = findById(id);
+        report.setArchived(!report.getArchived());
+        reportRepository.save(report);
+
+    }
 }

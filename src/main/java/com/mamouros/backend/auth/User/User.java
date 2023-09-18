@@ -26,6 +26,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false)
+    private Boolean receiveQuestions;
+
     @OneToMany(
             cascade = CascadeType.ALL,
             targetEntity = UserBuildings.class
@@ -41,6 +44,7 @@ public class User implements UserDetails {
         this.username = username;
         this.email = email;
         this.role = role;
+        this.receiveQuestions = false;
     }
 
 
@@ -116,6 +120,14 @@ public class User implements UserDetails {
         this.buildings = buildings;
     }
 
+    public Boolean getReceiveQuestions() {
+        return receiveQuestions;
+    }
+
+    public void setReceiveQuestions(Boolean receiveQuestions) {
+        this.receiveQuestions = receiveQuestions;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -124,6 +136,7 @@ public class User implements UserDetails {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", buildings=" + buildings +
+                ", receiveQuestions=" + receiveQuestions +
                 '}';
     }
 }

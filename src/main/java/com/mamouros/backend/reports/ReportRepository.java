@@ -17,5 +17,10 @@ public interface ReportRepository extends CrudRepository<Report, Long> {
             nativeQuery = true)
     Iterable<Report> findAllByUsername(@Param("name") String name);
 
+    @Query(
+            value = "select reports.* from reports where reports.ecoisland_id = :id",
+            nativeQuery = true)
+    Iterable<Report> findAllByEcoIsland(@Param("id") String id);
+
 
 }
