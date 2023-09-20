@@ -31,11 +31,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET");
         registry.addMapping("/user/**")
-                .allowedOrigins(allowedOrigins[0])
-                .allowedMethods("GET","POST","PUT","DELETE");
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
         registry.addMapping("/building/**")
-                .allowedOrigins(allowedOrigins[0])
-                .allowedMethods("GET", "POST", "DELETE", "PUT");
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
         registry.addMapping("/question/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");

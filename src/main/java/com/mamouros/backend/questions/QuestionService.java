@@ -156,4 +156,10 @@ public class QuestionService {
         questionRepository.save(question);
 
     }
+
+    public long countAllQuestions() {
+
+        List<Question> questions = (List<Question>) getAllQuestions();
+        return questions.stream().filter(question -> !question.getArchived()).count();
+    }
 }

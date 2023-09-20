@@ -78,6 +78,10 @@ public class QuestionController {
     public @ResponseBody Iterable<Question> getAllQuestions(){
         return questionService.getAllQuestions();
     }
+    @GetMapping("/get/count")
+    public @ResponseBody long countAllQuestions(){
+        return questionService.countAllQuestions();
+    }
 
 
 
