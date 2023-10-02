@@ -1,5 +1,6 @@
 package com.mamouros.backend.config;
 
+import com.mamouros.backend.exceptions.BadTokenRoleException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -57,6 +58,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }catch (ExpiredJwtException e){
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write("The token was expired");
+        }
+        catch (BadTokenRoleException e){
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write(e.getMessage());
         }
         catch (Exception e){
             response.setStatus(HttpStatus.UNAUTHORIZED.value());

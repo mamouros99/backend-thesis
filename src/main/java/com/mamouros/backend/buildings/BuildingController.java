@@ -37,7 +37,7 @@ public class BuildingController {
         try{
             //Get all campuses
             String id = getAlamedaId();
-            if(id.length() == 0){
+            if(id.isEmpty()){
                 throw new RuntimeException("Unable to recover buildings");
             }
 
@@ -113,7 +113,7 @@ public class BuildingController {
             UserBuildings userBuildings = new UserBuildings();
             userBuildings.setId(new BuildingId(userBuildingsDto.getId(), user));
             userBuildings.setName(userBuildingsDto.getName());
-            userBuildings.setReceiveEmails(true);
+            userBuildings.setReceiveEmails(false);
 
             user.getBuildings().add(userBuildings);
 
