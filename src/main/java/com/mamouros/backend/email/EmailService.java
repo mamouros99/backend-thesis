@@ -17,6 +17,7 @@ public class EmailService {
     public void sendEmail(String to, String subject, String body) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("tecnicofazadiferenca@gmail.com");
             message.setTo(to);
             message.setSubject(subject);
             message.setText(body);
@@ -25,7 +26,7 @@ public class EmailService {
             System.out.println("Sending email to:" + to);
         }
         catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
     }
