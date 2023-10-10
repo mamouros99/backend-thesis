@@ -39,6 +39,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/question/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
+        registry.addMapping("/roleRequest/**")
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("HEAD", "GET", "POST", "DELETE", "PATCH", "OPTIONS");
 
     }
 }

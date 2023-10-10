@@ -38,6 +38,10 @@ public class UserService {
         usersRepository.deleteById(username);
     }
 
+    public Iterable<User> findAllUsersWithRequests(){
+        return usersRepository.findAllUsersWithRequests();
+    }
+
     public void updateUser(String username, Role role) {
 
         User user = findByUsername(username);
