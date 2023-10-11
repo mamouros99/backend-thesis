@@ -45,7 +45,7 @@ public class EcoIslandController {
        return ecoIslandService.getAllEcoIslands();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path = "/export")
     public @ResponseBody ResponseEntity<Resource> exportEcoIslands() {
         return ecoIslandService.exportEcoIslands();
