@@ -5,6 +5,8 @@ public class AnswerDto {
     private Boolean fromApp;
     private String time;
 
+    private String author;
+
     public AnswerDto() {
     }
 
@@ -30,5 +32,13 @@ public class AnswerDto {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

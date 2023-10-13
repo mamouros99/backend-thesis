@@ -45,6 +45,12 @@ public class EcoIslandController {
        return ecoIslandService.getAllEcoIslands();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_VIEWER','ROLE_EDITOR', 'ROLE_ADMIN')")
+    @GetMapping(path="/all/{buildingId}")
+    public @ResponseBody Iterable<EcoIsland> getAllPerBuilding(@PathVariable String buildingId) {
+       return ecoIslandService.getEcoIslandsPerBuildingFloor(buildingId);
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_EDITOR', 'ROLE_ADMIN')")
     @GetMapping(path = "/export")
     public @ResponseBody ResponseEntity<Resource> exportEcoIslands() {

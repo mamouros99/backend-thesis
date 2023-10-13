@@ -1,7 +1,6 @@
 package com.mamouros.backend.questions.Answer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mamouros.backend.questions.Question;
 import jakarta.persistence.*;
 
@@ -18,6 +17,8 @@ public class Answer {
 
     private boolean fromApp;
     private boolean viewed;
+
+    private String author;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -73,5 +74,13 @@ public class Answer {
 
     public void setFromApp(boolean fromApp) {
         this.fromApp = fromApp;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

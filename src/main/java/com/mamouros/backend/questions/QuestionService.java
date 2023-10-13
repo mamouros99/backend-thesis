@@ -97,7 +97,7 @@ public class QuestionService {
         answer.setText(answerDto.getText());
         answer.setTime(answerDto.getTime());
         answer.setViewed(false);
-
+        answer.setAuthor(answerDto.getAuthor());
 
         question.addAnswer(answer);
 

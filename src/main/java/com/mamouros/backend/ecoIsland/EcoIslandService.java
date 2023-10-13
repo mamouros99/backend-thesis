@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EcoIslandService {
@@ -81,5 +80,10 @@ public class EcoIslandService {
             report.setArchived(true);
         }
         reportRepository.saveAll(reports);
+    }
+
+    public Iterable<EcoIsland> getEcoIslandsPerBuildingFloor(String buildingId) {
+
+        return ecoIslandRepository.findAllByBuildingId(buildingId);
     }
 }
